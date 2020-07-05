@@ -56,3 +56,31 @@ class LocalCompute(Compute):
       'type': self.type,
       'max_threads': self.max_threads
     }
+
+
+class PBSProCompute(Compute):
+  cpus_per_node = Column(String(5))
+  walltime = Column(String(10))
+  scheduler_options = Column(String(100))
+  worker_init = Column(String(100))
+
+  __mapper_args__ = {'polymorphic_identity': 'PBSPro'}
+
+  def __repr__(self):
+    return (
+      f'PBSProCompute('
+      f'cpus_per_node={self.cpus_per_node}'
+      f'walltime={self.walltime}'
+      f'scheduler_options={self.scheduler_options}'
+      f'worker_init={self.worker_init}'
+      f')'
+    )
+  
+  def asdict(self):
+    return {
+      'type': self.type,
+      'cpus_per_node': self.cpus_per_node,
+      'walltime': self.walltime,
+      'scheduler_options': self.scheduler_options,
+      'worker_init': self.worker_init
+    }
