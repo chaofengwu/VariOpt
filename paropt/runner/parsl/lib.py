@@ -519,7 +519,7 @@ def localConstrainedObjective(runConfig, **kwargs):
         if 'time_boundary' in kwargs:
             time_boundary = kwargs['time_boundary']
         else:
-            time_boundary = 1
+            time_boundary = 24
         if 'sigmoid_coef' in kwargs:
             sigmoid_coef = kwargs['sigmoid_coef']
         else:
@@ -549,6 +549,25 @@ def localConstrainedObjective(runConfig, **kwargs):
         if f1 < f1_boundary:
             return 0
         return f1 - sigmoid((time - time_boundary)/sigmoid_coef)*f1_boundary
+
+
+    def neg_boundary(time, f1):
+        time = time / 60
+        if f1 < f1_boundary:
+            return 0
+        return f1 - time
+
+    def frac_boundary(time, f1):
+        time = time / 60
+        if f1 < f1_boundary:
+            return 0
+        return f1 / time
+
+    def linear_boundary(time, f1):
+        time = time / 60
+        if f1 < f1_boundary:
+            return 0
+        return f1 + (time_boundary - time) / time_boundary * f1_boundary
 
 
     def default(time, f1):
@@ -592,6 +611,12 @@ def localConstrainedObjective(runConfig, **kwargs):
                 obj_output = default(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'boundary_default':
                 obj_output = boundary_default(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'neg_boundary':
+                obj_output = neg_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'frac_boundary':
+                obj_output = frac_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'linear_boundary':
+                obj_output = linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
 
             ret_dic['obj_parameters'] = obj_parameters
             ret_dic['obj_output'] = obj_output
@@ -600,12 +625,17 @@ def localConstrainedObjective(runConfig, **kwargs):
         except subprocess.TimeoutExpired:
             obj_parameters = {'running_time': timeout, 'f1': 0, 'caller_time': timeout}
             if obj_func == 'objective':
-                # obj_output = objective(obj_parameters['caller_time'], f1_obj(obj_parameters['precision'], obj_parameters['recall']))
                 obj_output = objective(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'default':
                 obj_output = default(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'boundary_default':
                 obj_output = boundary_default(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'neg_boundary':
+                obj_output = neg_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'frac_boundary':
+                obj_output = frac_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'linear_boundary':
+                obj_output = linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
 
             ret_dic['obj_output'] = obj_output
             ret_dic['obj_parameters'] = obj_parameters
