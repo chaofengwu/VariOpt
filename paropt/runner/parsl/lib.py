@@ -516,13 +516,15 @@ def localConstrainedObjective(runConfig, **kwargs):
     
     if 'time_boundary' not in kwargs.keys():
         time_boundary = 24
+    else:
+        time_boundary = kwargs['time_boundary']
+
     if obj_func == 'objective':
         pass
     elif obj_func == 'default':
         pass
     elif obj_func == 'sigmoid_boundary':
         f1_boundary = kwargs['f1_boundary']
-        time_boundary = kwargs['time_boundary']
         sigmoid_coef = kwargs['sigmoid_coef']
     elif obj_func == 'neg_boundary':
         f1_boundary = kwargs['f1_boundary']
@@ -532,10 +534,8 @@ def localConstrainedObjective(runConfig, **kwargs):
         pass
     elif obj_func == 'linear_boundary':
         f1_boundary = kwargs['f1_boundary']
-        time_boundary = kwargs['time_boundary']
     elif obj_func == 'frac_linear_boundary':
         f1_boundary = kwargs['f1_boundary']
-        time_boundary = kwargs['time_boundary']
 
     def sigmoid(x):
         return 1/(1+math.exp(-x))
