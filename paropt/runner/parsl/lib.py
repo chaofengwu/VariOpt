@@ -348,7 +348,7 @@ def constrainedObjective(runConfig, **kwargs):
     if 'boundary' in kwargs:
         boundary = kwargs['boundary']
         if obj_func == 'default':
-            obj_func = 'boundary_default'
+            obj_func = 'sigmoid_boundary'
     
 
     def sigmoid(x):
@@ -367,7 +367,7 @@ def constrainedObjective(runConfig, **kwargs):
         return 2*precision*recall/(precision+recall)
 
 
-    def boundary_default(time, f1):
+    def sigmoid_boundary(time, f1):
         # change time to hour unit
         time = time / 60 / 60
         return f1 + (-min(0, boundary - time)**2-min(0, boundary - time)) * (f1/abs(boundary - time))
@@ -412,8 +412,8 @@ def constrainedObjective(runConfig, **kwargs):
                 obj_output = objective(obj_parameters['caller_time'], f1_obj(obj_parameters['precision'], obj_parameters['recall']))
             elif obj_func == 'default':
                 obj_output = default(obj_parameters['running_time'], f1_cal(obj_parameters['precision'], obj_parameters['recall']))
-            elif obj_func == 'boundary_default':
-                obj_output = boundary_default(obj_parameters['running_time'], f1_cal(obj_parameters['precision'], obj_parameters['recall']))
+            elif obj_func == 'sigmoid_boundary':
+                obj_output = sigmoid_boundary(obj_parameters['running_time'], f1_cal(obj_parameters['precision'], obj_parameters['recall']))
 
             ret_dic['obj_parameters'] = obj_parameters
             ret_dic['obj_output'] = obj_output
@@ -425,8 +425,8 @@ def constrainedObjective(runConfig, **kwargs):
                 obj_output = objective(obj_parameters['caller_time'], f1_obj(obj_parameters['precision'], obj_parameters['recall']))
             elif obj_func == 'default':
                 obj_output = default(obj_parameters['running_time'], f1_cal(obj_parameters['precision'], obj_parameters['recall']))
-            elif obj_func == 'boundary_default':
-                obj_output = boundary_default(obj_parameters['running_time'], f1_cal(obj_parameters['precision'], obj_parameters['recall']))
+            elif obj_func == 'sigmoid_boundary':
+                obj_output = sigmoid_boundary(obj_parameters['running_time'], f1_cal(obj_parameters['precision'], obj_parameters['recall']))
 
             ret_dic['obj_output'] = obj_output
             ret_dic['obj_parameters'] = obj_parameters
@@ -514,19 +514,28 @@ def localConstrainedObjective(runConfig, **kwargs):
     else:
         obj_func = 'default'
     
-    if 'f1_boundary' in kwargs:
+    if 'time_boundary' not in kwargs.keys():
+        time_boundary = 24
+    if obj_func == 'objective':
+        pass
+    elif obj_func == 'default':
+        pass
+    elif obj_func == 'sigmoid_boundary':
         f1_boundary = kwargs['f1_boundary']
-        if 'time_boundary' in kwargs:
-            time_boundary = kwargs['time_boundary']
-        else:
-            time_boundary = 24
-        if 'sigmoid_coef' in kwargs:
-            sigmoid_coef = kwargs['sigmoid_coef']
-        else:
-            sigmoid_coef = 1
-        if obj_func == 'default':
-            obj_func = 'boundary_default'
-    
+        time_boundary = kwargs['time_boundary']
+        sigmoid_coef = kwargs['sigmoid_coef']
+    elif obj_func == 'neg_boundary':
+        f1_boundary = kwargs['f1_boundary']
+        pass
+    elif obj_func == 'frac_boundary':
+        f1_boundary = kwargs['f1_boundary']
+        pass
+    elif obj_func == 'linear_boundary':
+        f1_boundary = kwargs['f1_boundary']
+        time_boundary = kwargs['time_boundary']
+    elif obj_func == 'frac_linear_boundary':
+        f1_boundary = kwargs['f1_boundary']
+        time_boundary = kwargs['time_boundary']
 
     def sigmoid(x):
         return 1/(1+math.exp(-x))
@@ -544,7 +553,7 @@ def localConstrainedObjective(runConfig, **kwargs):
         return 2*precision*recall/(precision+recall)
 
 
-    def boundary_default(time, f1):
+    def sigmoid_boundary(time, f1):
         time = time/60
         if f1 < f1_boundary:
             return 0
@@ -568,6 +577,12 @@ def localConstrainedObjective(runConfig, **kwargs):
         if f1 < f1_boundary:
             return 0
         return f1 + (time_boundary - time) / time_boundary * f1_boundary
+
+    def frac_linear_boundary(time, f1):
+        time = time / 60
+        if f1 < f1_boundary:
+            return 0
+        return f1 + f1 / time + (time_boundary - time) / time_boundary * f1_boundary
 
 
     def default(time, f1):
@@ -609,14 +624,16 @@ def localConstrainedObjective(runConfig, **kwargs):
                 obj_output = objective(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'default':
                 obj_output = default(obj_parameters['caller_time'], obj_parameters['f1'])
-            elif obj_func == 'boundary_default':
-                obj_output = boundary_default(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'sigmoid_boundary':
+                obj_output = sigmoid_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'neg_boundary':
                 obj_output = neg_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'frac_boundary':
                 obj_output = frac_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'linear_boundary':
                 obj_output = linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'frac_linear_boundary':
+                obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
 
             ret_dic['obj_parameters'] = obj_parameters
             ret_dic['obj_output'] = obj_output
@@ -628,14 +645,16 @@ def localConstrainedObjective(runConfig, **kwargs):
                 obj_output = objective(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'default':
                 obj_output = default(obj_parameters['caller_time'], obj_parameters['f1'])
-            elif obj_func == 'boundary_default':
-                obj_output = boundary_default(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'sigmoid_boundary':
+                obj_output = sigmoid_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'neg_boundary':
                 obj_output = neg_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'frac_boundary':
                 obj_output = frac_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'linear_boundary':
                 obj_output = linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'frac_linear_boundary':
+                obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
 
             ret_dic['obj_output'] = obj_output
             ret_dic['obj_parameters'] = obj_parameters
