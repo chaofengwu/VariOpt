@@ -536,6 +536,9 @@ def localConstrainedObjective(runConfig, **kwargs):
         f1_boundary = kwargs['f1_boundary']
     elif obj_func == 'frac_linear_boundary':
         f1_boundary = kwargs['f1_boundary']
+    elif obj_func == 'new_sigmoid':
+    	alpha = kwargs['alpha']
+    	baseline_time = kwargs['baseline_time']
 
     def sigmoid(x):
         return 1/(1+math.exp(-x))
@@ -552,6 +555,13 @@ def localConstrainedObjective(runConfig, **kwargs):
             return 0
         return 2*precision*recall/(precision+recall)
 
+
+    def new_sigmoid(time, f1):
+    	time = time/60
+    	if f1 < f1_boundary:
+    		return 0
+
+    	return alpha * (f1 - f1_boundary) - sigmoid(time/baseline_time)
 
     def sigmoid_boundary(time, f1):
         time = time/60
@@ -634,6 +644,10 @@ def localConstrainedObjective(runConfig, **kwargs):
                 obj_output = linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'frac_linear_boundary':
                 obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'new_sigmoid':
+            	if baseline_time is None:
+            		baseline_time = obj_parameters['caller_time']
+            	obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
 
             ret_dic['obj_parameters'] = obj_parameters
             ret_dic['obj_output'] = obj_output
@@ -655,6 +669,10 @@ def localConstrainedObjective(runConfig, **kwargs):
                 obj_output = linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'frac_linear_boundary':
                 obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
+            elif obj_func == 'new_sigmoid':
+            	if baseline_time is None:
+            		baseline_time = obj_parameters['caller_time']
+            	obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
 
             ret_dic['obj_output'] = obj_output
             ret_dic['obj_parameters'] = obj_parameters

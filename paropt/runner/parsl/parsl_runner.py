@@ -49,6 +49,7 @@ class ParslRunner:
         self.plot_info = plot_info
         self.save_fail_trial = save_fail_trial
         self.obj_func = obj_func
+        self.baseline_time = None
         if obj_func_params is None:
             self.obj_func_params = {'timeout': 0}
         else:
@@ -92,6 +93,7 @@ class ParslRunner:
 
             if baseline_trial is not None:
                 self.baseline_obj_output = baseline_trial.outcome
+                self.baseline_time = self.baseline_trial.objective_parameters['caller_time']
                 self.get_baseline_output = True
 
 
@@ -234,6 +236,7 @@ class ParslRunner:
                         obj_parameters=result['obj_parameters'],
                     )
                     self.storage.saveResult(self.session, trial)
+                    self.baseline_time = result['obj_parameters']['caller_time']
                     self.get_baseline_output = True
 
                 # start normal trials
