@@ -539,6 +539,7 @@ def localConstrainedObjective(runConfig, **kwargs):
     elif obj_func == 'frac_linear_boundary':
         f1_boundary = kwargs['f1_boundary']
     elif obj_func == 'new_sigmoid':
+    	f1_boundary = kwargs['f1_boundary']
     	alpha = kwargs['alpha']
     	if 'baseline_time' in kwargs.keys():
     		baseline_time = kwargs['baseline_time'] / 60
@@ -562,10 +563,9 @@ def localConstrainedObjective(runConfig, **kwargs):
     def new_sigmoid(time, f1):
     	time = time/60
     	return alpha/2 * (f1 - f1_boundary + abs(f1-f1_boundary)) - sigmoid(time/baseline_time) + 1
-    	if f1 < f1_boundary:
-    		return 0
-
-    	return alpha * (f1 - f1_boundary) + f1_boundary*(1 - sigmoid(time/baseline_time - 1))
+    	# if f1 < f1_boundary:
+    	# 	return 0
+    	# return alpha * (f1 - f1_boundary) + f1_boundary*(1 - sigmoid(time/baseline_time - 1))
 
     def sigmoid_boundary(time, f1):
         time = time/60
