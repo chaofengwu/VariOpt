@@ -670,6 +670,8 @@ def localConstrainedObjective(runConfig, **kwargs):
                 ret_dic['obj_output'] = 0
                 if 'baseline_time' not in kwargs.keys():
                     baseline_time = obj_parameters['caller_time']
+                else:
+                    baseline_time = kwargs['baseline_time']
                 ret_dic['obj_output'] = 1
                 if not alpha:
                     obj_output = 1
@@ -679,11 +681,11 @@ def localConstrainedObjective(runConfig, **kwargs):
                 if not baseline_time:
                     obj_output = 0
                 ret_dic['obj_output'] = 3
-                # obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'])
+                obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'], baseline_time)
             elif obj_func == 'new_linear':
                 if baseline_time is None:
                     baseline_time = obj_parameters['caller_time']
-                obj_output = new_linear(obj_parameters['caller_time'], obj_parameters['f1'])
+                obj_output = new_linear(obj_parameters['caller_time'], obj_parameters['f1'], baseline_time)
 
             ret_dic['obj_parameters'] = obj_parameters
             ret_dic['obj_output'] = obj_output
