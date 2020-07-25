@@ -572,10 +572,7 @@ def localConstrainedObjective(runConfig, **kwargs):
 
     def new_sigmoid(time, f1, baseline_time):
         time = time/60
-        return 1
         if f1 < f1_boundary:
-            return 0
-        if not baseline_time:
             return 0
         return 0.24/sensitivity/alpha * (f1 - f1_boundary) - sigmoid(time/(sensitivity*baseline_time)) + 1
 
@@ -672,15 +669,6 @@ def localConstrainedObjective(runConfig, **kwargs):
                     baseline_time = obj_parameters['caller_time']
                 else:
                     baseline_time = kwargs['baseline_time']
-                ret_dic['obj_output'] = 1
-                if not alpha:
-                    obj_output = 1
-                if not sensitivity:
-                    obj_output = 2
-                ret_dic['obj_output'] = 2
-                if not baseline_time:
-                    obj_output = 0
-                ret_dic['obj_output'] = 3
                 obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'], baseline_time)
             elif obj_func == 'new_linear':
                 if baseline_time is None:
