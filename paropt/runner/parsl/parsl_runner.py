@@ -239,7 +239,7 @@ class ParslRunner:
                     self.baseline_time = result['obj_parameters']['caller_time']
                     self.get_baseline_output = True
 
-                if 'baseline_time' in self.obj_func_params.keys() and obj_func_params['baseline_time'] is None:
+                if 'baseline_time' in self.obj_func_params.keys() and self.obj_func_params['baseline_time'] is None:
                 	self.obj_func_params['baseline_time'] = self.baseline_time
                 # start normal trials
                 logger.info(f'Starting trial with script at {command_script_path}\n')
