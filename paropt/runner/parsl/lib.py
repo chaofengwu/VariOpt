@@ -666,7 +666,7 @@ def localConstrainedObjective(runConfig, **kwargs):
                     obj_output = 1
                 if not sensitivity:
                     obj_output = 2
-                obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'])
+                # obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_linear':
                 if baseline_time == -1:
                     baseline_time = obj_parameters['caller_time']
