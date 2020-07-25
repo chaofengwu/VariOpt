@@ -520,7 +520,7 @@ def localConstrainedObjective(runConfig, **kwargs):
         time_boundary = kwargs['time_boundary']
 
 
-    baseline_time = None
+    baseline_time = -1
     sensitivity = 2
     if obj_func == 'objective':
         pass
@@ -657,11 +657,11 @@ def localConstrainedObjective(runConfig, **kwargs):
             elif obj_func == 'frac_linear_boundary':
                 obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_sigmoid':
-                if baseline_time is None:
+                if baseline_time == -1:
                     baseline_time = obj_parameters['caller_time']
                 obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_linear':
-                if baseline_time is None:
+                if baseline_time == -1:
                     baseline_time = obj_parameters['caller_time']
                 obj_output = new_linear(obj_parameters['caller_time'], obj_parameters['f1'])
 
@@ -686,9 +686,11 @@ def localConstrainedObjective(runConfig, **kwargs):
             elif obj_func == 'frac_linear_boundary':
                 obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_sigmoid':
+                if baseline_time == -1:
+                    baseline_time = obj_parameters['caller_time']
                 obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_linear':
-                if baseline_time is None:
+                if baseline_time == -1:
                     baseline_time = obj_parameters['caller_time']
                 obj_output = new_linear(obj_parameters['caller_time'], obj_parameters['f1'])
 
