@@ -520,7 +520,7 @@ def localConstrainedObjective(runConfig, **kwargs):
         time_boundary = kwargs['time_boundary']
 
 
-    baseline_time = -1
+    baseline_time = None
     sensitivity = 2
     if obj_func == 'objective':
         pass
@@ -658,7 +658,7 @@ def localConstrainedObjective(runConfig, **kwargs):
             elif obj_func == 'frac_linear_boundary':
                 obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_sigmoid':
-                if baseline_time == -1:
+                if baseline_time is None:
                     baseline_time = obj_parameters['caller_time']
                 if not baseline_time:
                     obj_output = 0
@@ -668,7 +668,7 @@ def localConstrainedObjective(runConfig, **kwargs):
                     obj_output = 2
                 # obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_linear':
-                if baseline_time == -1:
+                if baseline_time is None:
                     baseline_time = obj_parameters['caller_time']
                 obj_output = new_linear(obj_parameters['caller_time'], obj_parameters['f1'])
 
@@ -693,17 +693,11 @@ def localConstrainedObjective(runConfig, **kwargs):
             elif obj_func == 'frac_linear_boundary':
                 obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_sigmoid':
-                if baseline_time == -1:
+                if baseline_time is None:
                     baseline_time = obj_parameters['caller_time']
-                if not baseline_time:
-                    obj_output = 0
-                if not alpha:
-                    obj_output = 1
-                if not sensitivity:
-                    obj_output = 2
                 obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_linear':
-                if baseline_time == -1:
+                if baseline_time is None:
                     baseline_time = obj_parameters['caller_time']
                 obj_output = new_linear(obj_parameters['caller_time'], obj_parameters['f1'])
 
