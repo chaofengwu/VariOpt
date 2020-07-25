@@ -711,7 +711,8 @@ def localConstrainedObjective(runConfig, **kwargs):
             ret_dic['obj_parameters'] = obj_parameters
             ret_dic['returncode'] = timeout_returncode
             return ret_dic
-        except:
+        except Exception as e:
+            ret_dic['errors'] = e
             return ret_dic
 
 
