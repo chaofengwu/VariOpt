@@ -562,6 +562,10 @@ def localConstrainedObjective(runConfig, **kwargs):
 
     def new_sigmoid(time, f1):
     	time = time/60
+    	if not alpha:
+    		return 0
+    	if not baseline_time:
+    		return 1
     	return time
     	return alpha
     	return baseline_time
