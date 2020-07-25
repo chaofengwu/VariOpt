@@ -565,6 +565,7 @@ def localConstrainedObjective(runConfig, **kwargs):
 
     def new_sigmoid(time, f1):
         time = time/60
+        return 1
         if f1 < f1_boundary:
             return 0
         return 0.24/sensitivity/alpha * (f1 - f1_boundary) - sigmoid(time/(sensitivity*baseline_time)) + 1
