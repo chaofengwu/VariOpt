@@ -656,6 +656,7 @@ def localConstrainedObjective(runConfig, **kwargs):
             elif obj_func == 'frac_linear_boundary':
                 obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_sigmoid':
+            	return 1
             	if baseline_time is None:
             		baseline_time = obj_parameters['caller_time']
             	if baseline_time is None:
