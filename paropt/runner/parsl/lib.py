@@ -521,6 +521,7 @@ def localConstrainedObjective(runConfig, **kwargs):
 
 
     baseline_time = None
+    sensitivity = 2
     if obj_func == 'objective':
         pass
     elif obj_func == 'default':
@@ -538,22 +539,11 @@ def localConstrainedObjective(runConfig, **kwargs):
         f1_boundary = kwargs['f1_boundary']
     elif obj_func == 'frac_linear_boundary':
         f1_boundary = kwargs['f1_boundary']
-    elif obj_func == 'new_sigmoid':
+    elif obj_func == 'new_sigmoid' or obj_func == 'new_linear':
         f1_boundary = kwargs['f1_boundary']
         alpha = kwargs['alpha']
-        try:
+        if 'sensitivity' in kwargs.keys():
             sensitivity = kwargs['sensitivity']
-        except:
-            sensitivity = 2
-        if 'baseline_time' in kwargs.keys():
-            baseline_time = kwargs['baseline_time'] / 60
-    elif obj_func == 'new_linear':
-        f1_boundary = kwargs['f1_boundary']
-        alpha = kwargs['alpha']
-        try:
-            sensitivity = kwargs['sensitivity']
-        except:
-            sensitivity = 2
         if 'baseline_time' in kwargs.keys():
             baseline_time = kwargs['baseline_time'] / 60
 
