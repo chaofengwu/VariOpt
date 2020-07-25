@@ -570,7 +570,7 @@ def localConstrainedObjective(runConfig, **kwargs):
         return 2*precision*recall/(precision+recall)
 
 
-    def new_sigmoid(time, f1):
+    def new_sigmoid(time, f1, baseline_time):
         time = time/60
         return 1
         if f1 < f1_boundary:
