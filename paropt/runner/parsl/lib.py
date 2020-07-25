@@ -569,7 +569,7 @@ def localConstrainedObjective(runConfig, **kwargs):
         # return time
         # return alpha
         # return baseline_time
-        return 2
+        # return 2
         return alpha/2 * (f1 - f1_boundary + abs(f1-f1_boundary)) - sigmoid(time/baseline_time) + 1
         # if f1 < f1_boundary:
         #   return 0
