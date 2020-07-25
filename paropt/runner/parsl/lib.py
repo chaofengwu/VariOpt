@@ -576,7 +576,7 @@ def localConstrainedObjective(runConfig, **kwargs):
             return 0
         return 0.24/sensitivity/alpha * (f1 - f1_boundary) - sigmoid(time/(sensitivity*baseline_time)) + 1
 
-    def new_linear(time, f1):
+    def new_linear(time, f1, baseline_time):
         time = time/60
         if f1 < f1_boundary:
             return 0
@@ -664,15 +664,16 @@ def localConstrainedObjective(runConfig, **kwargs):
             elif obj_func == 'frac_linear_boundary':
                 obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_sigmoid':
-                ret_dic['obj_output'] = 0
                 if 'baseline_time' not in kwargs.keys():
                     baseline_time = obj_parameters['caller_time']
                 else:
                     baseline_time = kwargs['baseline_time']
                 obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'], baseline_time)
             elif obj_func == 'new_linear':
-                if baseline_time is None:
+                if 'baseline_time' not in kwargs.keys():
                     baseline_time = obj_parameters['caller_time']
+                else:
+                    baseline_time = kwargs['baseline_time']
                 obj_output = new_linear(obj_parameters['caller_time'], obj_parameters['f1'], baseline_time)
 
             ret_dic['obj_parameters'] = obj_parameters
@@ -696,13 +697,17 @@ def localConstrainedObjective(runConfig, **kwargs):
             elif obj_func == 'frac_linear_boundary':
                 obj_output = frac_linear_boundary(obj_parameters['caller_time'], obj_parameters['f1'])
             elif obj_func == 'new_sigmoid':
-                if baseline_time is None:
+                if 'baseline_time' not in kwargs.keys():
                     baseline_time = obj_parameters['caller_time']
-                obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'])
+                else:
+                    baseline_time = kwargs['baseline_time']
+                obj_output = new_sigmoid(obj_parameters['caller_time'], obj_parameters['f1'], baseline_time)
             elif obj_func == 'new_linear':
-                if baseline_time is None:
+                if 'baseline_time' not in kwargs.keys():
                     baseline_time = obj_parameters['caller_time']
-                obj_output = new_linear(obj_parameters['caller_time'], obj_parameters['f1'])
+                else:
+                    baseline_time = kwargs['baseline_time']
+                obj_output = new_linear(obj_parameters['caller_time'], obj_parameters['f1'], baseline_time)
 
             ret_dic['obj_output'] = obj_output
             ret_dic['obj_parameters'] = obj_parameters
