@@ -300,6 +300,7 @@ class ParslRunner:
                     self.run_result['success'] = False
                     self.run_result['message'][f'experiment {self.experiment.id} run {self.run_number}, config is {parameter_configs}'] = (f'Failed to complete trials {idx}:\nError: {e};\t{err_traceback};\toutput is {result}')
                     print(err_traceback)
+                    print(result)
         
         logger.info(f'Finished; Run result: {self.run_result}\n')
         
