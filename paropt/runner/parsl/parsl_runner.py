@@ -251,7 +251,7 @@ class ParslRunner:
                 )
                 result = None
                 result = self.obj_func(runConfig, **self.obj_func_params).result()
-
+                print(result)
                 self._validateResult(parameter_configs, result)
                 if self.get_baseline_output:
                     result['obj_parameters']['wrt_baseline'] = result['obj_output'] / self.baseline_obj_output
@@ -271,6 +271,7 @@ class ParslRunner:
 
             except Exception as e:
                 err_traceback = traceback.format_exc()
+                print(result)
                 if result is not None and result['stdout'] == 'Timeout': # for timeCommandLimitTime in lib, timeout
                     if self.get_baseline_output:
                         result['obj_parameters']['wrt_baseline'] = result['obj_output'] / self.baseline_obj_output
