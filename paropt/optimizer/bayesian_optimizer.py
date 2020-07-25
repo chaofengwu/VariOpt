@@ -184,7 +184,10 @@ class BayesianOptimizer(BaseOptimizer):
                 obj_parameters=trial.obj_parameters,
             )
 
-            self.register(dup_trial) # register this trial
+            try:
+                self.register(dup_trial) # register this trial
+            except:
+                pass
 
             # get another suggestion from updated model, and check
             config_dict = self.optimizer.suggest(self.utility)
