@@ -545,14 +545,14 @@ def localConstrainedObjective(runConfig, **kwargs):
         if 'sensitivity' in kwargs.keys():
             sensitivity = kwargs['sensitivity']
         if 'baseline_time' in kwargs.keys():
-            baseline_time = kwargs['baseline_time'] / 60
+            baseline_time = kwargs['baseline_time']
     elif obj_func == 'new_linear':
         f1_boundary = kwargs['f1_boundary']
         alpha = kwargs['alpha']
         if 'sensitivity' in kwargs.keys():
             sensitivity = kwargs['sensitivity']
         if 'baseline_time' in kwargs.keys():
-            baseline_time = kwargs['baseline_time'] / 60
+            baseline_time = kwargs['baseline_time']
 
     def sigmoid(x):
         return 1/(1+math.exp(-x))
@@ -572,12 +572,14 @@ def localConstrainedObjective(runConfig, **kwargs):
 
     def new_sigmoid(time, f1, baseline_time):
         time = time/60
+        baseline_time = baseline_time / 60
         if f1 < f1_boundary:
             return 0
         return 0.24/(baseline_time*sensitivity)/alpha * (f1 - f1_boundary) - sigmoid(time/(sensitivity*baseline_time) - 1) + 1
 
     def new_linear(time, f1, baseline_time):
         time = time/60
+        baseline_time = baseline_time / 60
         if f1 < f1_boundary:
             return 0
         return 1/alpha/(baseline_time*sensitivity) * (f1 - f1_boundary) - (1/(sensitivity*baseline_time) * time) + f1_boundary
