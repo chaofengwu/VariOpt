@@ -14,7 +14,7 @@ from .entities import (Trial, Parameter, Experiment, ParameterConfig,
 logger = logging.getLogger(__name__)
 
 class RelationalDB(StorageBase):
-  def __init__(self, dialect, username, password, host_url, dbname, experiment=None, experiment_id=None):
+  def __init__(self, dialect='sqlite', username='', password='', host_url='', dbname='liteTest', experiment=None, experiment_id=None):
     self.dialect = dialect
     self.username = username
     self.password = password
